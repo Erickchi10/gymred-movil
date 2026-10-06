@@ -1,0 +1,2173 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "summary": "Inicia sesion y devuelve el token",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/auth/registro/dueno": {
+      "post": {
+        "operationId": "AuthController_registrarDueno",
+        "summary": "Registra un dueno junto con su gimnasio",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistroDuenoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/auth/registro/cliente": {
+      "post": {
+        "operationId": "AuthController_registrarCliente",
+        "summary": "Registra un cliente (app movil)",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistroClienteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/auth/perfil": {
+      "get": {
+        "operationId": "AuthController_perfil",
+        "summary": "Datos del usuario del token",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "auth"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/auth/password": {
+      "put": {
+        "operationId": "AuthController_cambiar",
+        "summary": "Cambia la contrasena",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CambiarPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "auth"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/gimnasios/mios": {
+      "get": {
+        "operationId": "GymsController_mios",
+        "summary": "Gimnasios del dueno que inicio sesion",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "gimnasios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/gimnasios/{gymId}": {
+      "get": {
+        "operationId": "GymsController_detalle",
+        "summary": "Ficha completa del gimnasio",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "gimnasios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "GymsController_actualizar",
+        "summary": "Mantenimiento: datos generales",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DatosGimnasioDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "gimnasios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/gimnasios/{gymId}/horarios": {
+      "put": {
+        "operationId": "GymsController_horarios",
+        "summary": "Mantenimiento: horarios de la semana",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HorariosDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "gimnasios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/gimnasios/{gymId}/fotos": {
+      "post": {
+        "operationId": "GymsController_agregarFoto",
+        "summary": "Agrega una foto por URL",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FotoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "gimnasios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/gimnasios/{gymId}/fotos/subir": {
+      "post": {
+        "operationId": "GymsController_subirFoto",
+        "summary": "Sube un archivo de imagen del gimnasio",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "gimnasios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/gimnasios/{gymId}/fotos/{idFoto}": {
+      "delete": {
+        "operationId": "GymsController_borrarFoto",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "idFoto",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "gimnasios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/gimnasios/{gymId}/servicios": {
+      "post": {
+        "operationId": "GymsController_agregarServicio",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServicioDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "gimnasios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/gimnasios/{gymId}/servicios/{idServicio}": {
+      "delete": {
+        "operationId": "GymsController_borrarServicio",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "idServicio",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "gimnasios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/gimnasios/{gymId}/amenidades": {
+      "post": {
+        "operationId": "GymsController_agregarAmenidad",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AmenidadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "gimnasios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/gimnasios/{gymId}/amenidades/{idAmenidad}": {
+      "delete": {
+        "operationId": "GymsController_borrarAmenidad",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "idAmenidad",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "gimnasios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/precios/{gymId}": {
+      "get": {
+        "operationId": "PricesController_lista",
+        "summary": "Precios propios del gimnasio y su historial",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "precios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "PricesController_guardar",
+        "summary": "Guarda o actualiza un precio (el historial se llena solo)",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrecioDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "precios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/precios/{gymId}/{idPrecio}": {
+      "delete": {
+        "operationId": "PricesController_borrar",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "idPrecio",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "precios"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/contrato/{gymId}": {
+      "get": {
+        "operationId": "ContractsController_ver",
+        "summary": "Plan Gymred del gimnasio, facturacion y liquidaciones",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "contrato"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/contrato/{gymId}/solicitud-plan": {
+      "post": {
+        "operationId": "ContractsController_cambiar",
+        "summary": "Solicita cambio de plan",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudPlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "contrato"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/contrato/{gymId}/baja": {
+      "post": {
+        "operationId": "ContractsController_baja",
+        "summary": "Solicita darse de baja de la plataforma",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudBajaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "contrato"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "ContractsController_cancelar",
+        "summary": "Cancela la solicitud de baja",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "contrato"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/accesos/{gymId}/resumen": {
+      "get": {
+        "operationId": "AccessController_resumen",
+        "summary": "Datos del dashboard",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "accesos"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/accesos/{gymId}/historial": {
+      "get": {
+        "operationId": "AccessController_historial",
+        "summary": "Historial de accesos con filtros",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "desde",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2026-09-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "hasta",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2026-09-14",
+              "type": "string"
+            }
+          },
+          {
+            "name": "resultado",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "permitido",
+                "denegado"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "buscar",
+            "required": false,
+            "in": "query",
+            "description": "Busca por nombre de cliente o codigo leido",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pagina",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "porPagina",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 15,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "accesos"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/accesos/{gymId}/reportes": {
+      "get": {
+        "operationId": "AccessController_reportes",
+        "summary": "Reportes: visitas por mes, por dia, top clientes y motivos",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "meses",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "accesos"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/movil/planes": {
+      "get": {
+        "operationId": "MobileController_planes",
+        "summary": "Planes de suscripcion disponibles",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "movil"
+        ]
+      }
+    },
+    "/api/movil/gimnasios": {
+      "get": {
+        "operationId": "MobileController_gimnasios",
+        "summary": "Catalogo de gimnasios afiliados (con filtros y cercania)",
+        "parameters": [
+          {
+            "name": "buscar",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoria",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lat",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lng",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "movil"
+        ]
+      }
+    },
+    "/api/movil/gimnasios/{id}": {
+      "get": {
+        "operationId": "MobileController_gimnasio",
+        "summary": "Ficha publica de un gimnasio",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "movil"
+        ]
+      }
+    },
+    "/api/movil/mi-suscripcion": {
+      "get": {
+        "operationId": "MobileController_miSuscripcion",
+        "summary": "Suscripcion vigente del cliente",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "movil"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/movil/suscripcion": {
+      "post": {
+        "operationId": "MobileController_contratar",
+        "summary": "Contrata o renueva un plan",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContratarPlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "movil"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/movil/acceso": {
+      "post": {
+        "operationId": "MobileController_entrar",
+        "summary": "Entrar al gimnasio escaneando la pantalla",
+        "description": "La app escanea el QR que muestra la pantalla de la entrada y manda ese codigo aqui. La respuesta dice si se permite el paso y por que. Todo intento queda registrado.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntrarDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "movil"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/movil/gimnasios/{id}/inventario": {
+      "get": {
+        "operationId": "MobileController_inventario",
+        "summary": "Que puede entrenar el socio en ese gimnasio",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "movil"
+        ]
+      }
+    },
+    "/api/movil/mi-historial": {
+      "get": {
+        "operationId": "MobileController_historial",
+        "summary": "Visitas del cliente",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "movil"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/movil/gimnasios/{id}/resena": {
+      "post": {
+        "operationId": "MobileController_resena",
+        "summary": "Deja o actualiza una resena",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResenaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "movil"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/inventario/{gymId}": {
+      "get": {
+        "operationId": "InventoryController_lista",
+        "summary": "Equipo y actividades que ofrece el gimnasio",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "inventario"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "InventoryController_crear",
+        "summary": "Agrega equipo o actividad al inventario",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrearEquipoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "inventario"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/inventario/{gymId}/{id}": {
+      "put": {
+        "operationId": "InventoryController_actualizar",
+        "summary": "Edita un equipo o lo marca fuera de servicio",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActualizarEquipoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "inventario"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "InventoryController_borrar",
+        "summary": "Quita un equipo del inventario",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "inventario"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/incidencias/{gymId}": {
+      "get": {
+        "operationId": "IncidentsController_lista",
+        "summary": "Reportes de mantenimiento del gimnasio",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "situacion",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "prioridad",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "incidencias"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "IncidentsController_crear",
+        "summary": "Levanta un reporte de mantenimiento",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrearIncidenciaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "incidencias"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/incidencias/{gymId}/{id}": {
+      "put": {
+        "operationId": "IncidentsController_actualizar",
+        "summary": "Cambia la situacion o los datos de un reporte",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActualizarIncidenciaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "incidencias"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "IncidentsController_borrar",
+        "summary": "Elimina un reporte",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "incidencias"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/configuracion/{gymId}": {
+      "get": {
+        "operationId": "SettingsController_ver",
+        "summary": "Preferencias del panel y del lector",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "configuracion"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "SettingsController_guardar",
+        "summary": "Guarda las preferencias",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfiguracionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "configuracion"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/pantalla/{gymId}/pantallas": {
+      "get": {
+        "operationId": "KioskController_lista",
+        "summary": "Pantallas de acceso del gimnasio",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "pantalla"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/pantalla/{gymId}/codigo": {
+      "post": {
+        "operationId": "KioskController_rotar",
+        "summary": "Genera el siguiente codigo QR de la pantalla",
+        "description": "La pantalla lo vuelve a pedir sola antes de que venza.",
+        "parameters": [
+          {
+            "name": "gymId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "serie",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "segundos",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "pantalla"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Gymred API",
+    "description": "API de la plataforma de gimnasios Gymred. La usan el panel web, el lector de acceso y la app movil.",
+    "version": "1.0",
+    "contact": {
+
+    }
+  },
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Autenticacion de duenos y clientes"
+    },
+    {
+      "name": "gimnasios",
+      "description": "Panel web: datos, horarios, fotos, servicios y amenidades"
+    },
+    {
+      "name": "precios",
+      "description": "Panel web: precios propios del gimnasio"
+    },
+    {
+      "name": "contrato",
+      "description": "Panel web: plan Gymred, liquidaciones y baja"
+    },
+    {
+      "name": "accesos",
+      "description": "Panel web: dashboard, historial y reportes"
+    },
+    {
+      "name": "pantalla",
+      "description": "Pantalla de acceso: genera el QR que escanea el socio"
+    },
+    {
+      "name": "inventario",
+      "description": "Panel web: equipo y actividades del gimnasio"
+    },
+    {
+      "name": "incidencias",
+      "description": "Panel web: reportes de mantenimiento"
+    },
+    {
+      "name": "configuracion",
+      "description": "Panel web: preferencias del panel y del lector"
+    },
+    {
+      "name": "movil",
+      "description": "Endpoints de la app movil (clientes)"
+    }
+  ],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "ricardo@ironhouse.mx"
+          },
+          "password": {
+            "type": "string",
+            "example": "Gymred123"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "RegistroDuenoDto": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "example": "Ana Lopez"
+          },
+          "email": {
+            "type": "string",
+            "example": "ana@migym.mx"
+          },
+          "password": {
+            "type": "string",
+            "example": "Gymred123"
+          },
+          "telefono": {
+            "type": "string"
+          },
+          "nombreGimnasio": {
+            "type": "string",
+            "example": "Gimnasio Fuerza"
+          },
+          "calle": {
+            "type": "string"
+          },
+          "colonia": {
+            "type": "string"
+          },
+          "ciudad": {
+            "type": "string",
+            "example": "Merida"
+          },
+          "categoria": {
+            "type": "string",
+            "example": "gimnasio"
+          }
+        },
+        "required": [
+          "nombre",
+          "email",
+          "password",
+          "nombreGimnasio"
+        ]
+      },
+      "RegistroClienteDto": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "telefono": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "nombre",
+          "email",
+          "password"
+        ]
+      },
+      "CambiarPasswordDto": {
+        "type": "object",
+        "properties": {
+          "actual": {
+            "type": "string"
+          },
+          "nueva": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "actual",
+          "nueva"
+        ]
+      },
+      "DatosGimnasioDto": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "calle": {
+            "type": "string"
+          },
+          "colonia": {
+            "type": "string"
+          },
+          "ciudad": {
+            "type": "string"
+          },
+          "estado": {
+            "type": "string"
+          },
+          "codigoPostal": {
+            "type": "string"
+          },
+          "telefono": {
+            "type": "string"
+          },
+          "latitud": {
+            "type": "number"
+          },
+          "longitud": {
+            "type": "number"
+          },
+          "capacidadMaxima": {
+            "type": "number"
+          },
+          "categoria": {
+            "type": "string",
+            "example": "gimnasio"
+          }
+        }
+      },
+      "HorarioDto": {
+        "type": "object",
+        "properties": {
+          "diaSemana": {
+            "type": "number",
+            "example": 1,
+            "description": "1 = lunes ... 7 = domingo"
+          },
+          "horaApertura": {
+            "type": "string",
+            "example": "06:00:00"
+          },
+          "horaCierre": {
+            "type": "string",
+            "example": "22:00:00"
+          },
+          "cerrado": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "diaSemana"
+        ]
+      },
+      "HorariosDto": {
+        "type": "object",
+        "properties": {
+          "horarios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HorarioDto"
+            }
+          }
+        },
+        "required": [
+          "horarios"
+        ]
+      },
+      "FotoDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "example": "/uploads/mi-foto.jpg"
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "portada": {
+            "type": "boolean"
+          },
+          "orden": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "ServicioDto": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "example": "Spinning"
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "nombre"
+        ]
+      },
+      "AmenidadDto": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "example": "Regaderas"
+          },
+          "icono": {
+            "type": "string",
+            "example": "shower"
+          }
+        },
+        "required": [
+          "nombre"
+        ]
+      },
+      "PrecioDto": {
+        "type": "object",
+        "properties": {
+          "concepto": {
+            "type": "string",
+            "example": "mes",
+            "enum": [
+              "visita",
+              "semana",
+              "quincena",
+              "mes",
+              "anual"
+            ]
+          },
+          "monto": {
+            "type": "number",
+            "example": 599
+          },
+          "activo": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "concepto",
+          "monto"
+        ]
+      },
+      "SolicitudPlanDto": {
+        "type": "object",
+        "properties": {
+          "tipoSolicitado": {
+            "type": "string",
+            "example": "premium",
+            "enum": [
+              "basico",
+              "premium",
+              "elite"
+            ]
+          },
+          "mensaje": {
+            "type": "string",
+            "example": "Queremos reportes avanzados."
+          }
+        },
+        "required": [
+          "tipoSolicitado"
+        ]
+      },
+      "SolicitudBajaDto": {
+        "type": "object",
+        "properties": {
+          "motivo": {
+            "type": "string",
+            "example": "Cierre temporal del gimnasio"
+          },
+          "comentario": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "motivo"
+        ]
+      },
+      "ContratarPlanDto": {
+        "type": "object",
+        "properties": {
+          "idPlan": {
+            "type": "number",
+            "example": 2,
+            "description": "Id del plan de la plataforma"
+          },
+          "metodo": {
+            "type": "string",
+            "example": "tarjeta"
+          }
+        },
+        "required": [
+          "idPlan"
+        ]
+      },
+      "EntrarDto": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "example": "FP.FP-LEC-0001.9A3C7E1B5D02",
+            "description": "El codigo que muestra la pantalla de la entrada"
+          }
+        },
+        "required": [
+          "codigo"
+        ]
+      },
+      "ResenaDto": {
+        "type": "object",
+        "properties": {
+          "calificacion": {
+            "type": "number",
+            "example": 5
+          },
+          "comentario": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "calificacion"
+        ]
+      },
+      "CrearEquipoDto": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "example": "Prensa de piernas"
+          },
+          "categoria": {
+            "type": "string",
+            "example": "maquinas",
+            "enum": [
+              "peso_libre",
+              "maquinas",
+              "cardio",
+              "funcional",
+              "clases",
+              "otro"
+            ]
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "cantidad": {
+            "type": "number",
+            "example": 2
+          },
+          "situacion": {
+            "type": "string",
+            "enum": [
+              "disponible",
+              "fuera_de_servicio"
+            ]
+          }
+        },
+        "required": [
+          "nombre",
+          "categoria"
+        ]
+      },
+      "ActualizarEquipoDto": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "categoria": {
+            "type": "string",
+            "enum": [
+              "peso_libre",
+              "maquinas",
+              "cardio",
+              "funcional",
+              "clases",
+              "otro"
+            ]
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "cantidad": {
+            "type": "number"
+          },
+          "situacion": {
+            "type": "string",
+            "enum": [
+              "disponible",
+              "fuera_de_servicio"
+            ]
+          }
+        }
+      },
+      "CrearIncidenciaDto": {
+        "type": "object",
+        "properties": {
+          "equipo": {
+            "type": "string",
+            "example": "Cinta de correr #2"
+          },
+          "titulo": {
+            "type": "string",
+            "example": "La banda se traba al subir la velocidad"
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "prioridad": {
+            "type": "string",
+            "enum": [
+              "baja",
+              "media",
+              "alta"
+            ]
+          }
+        },
+        "required": [
+          "equipo",
+          "titulo"
+        ]
+      },
+      "ActualizarIncidenciaDto": {
+        "type": "object",
+        "properties": {
+          "equipo": {
+            "type": "string"
+          },
+          "titulo": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "prioridad": {
+            "type": "string",
+            "enum": [
+              "baja",
+              "media",
+              "alta"
+            ]
+          },
+          "situacion": {
+            "type": "string",
+            "enum": [
+              "pendiente",
+              "en_progreso",
+              "resuelto"
+            ]
+          }
+        }
+      },
+      "ConfiguracionDto": {
+        "type": "object",
+        "properties": {
+          "tema": {
+            "type": "string",
+            "enum": [
+              "claro",
+              "oscuro"
+            ]
+          },
+          "colorAcento": {
+            "type": "string",
+            "enum": [
+              "naranja",
+              "azul",
+              "verde",
+              "morado"
+            ]
+          },
+          "modoValidacion": {
+            "type": "string",
+            "enum": [
+              "en_linea",
+              "tolerancia_sin_conexion"
+            ]
+          },
+          "toleranciaSegundos": {
+            "type": "number",
+            "example": 300,
+            "description": "Cuánto vive el código QR, en segundos"
+          },
+          "avisarPorCorreo": {
+            "type": "boolean"
+          },
+          "avisarAccesosDenegados": {
+            "type": "boolean"
+          },
+          "avisarIncidencias": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
