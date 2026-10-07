@@ -46,3 +46,8 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Reportes de errores de Java
+hs_err_pid*.log
+replay_pid*.log
+
