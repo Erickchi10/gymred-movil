@@ -30,4 +30,27 @@ class AuthService {
       throw ApiClient.traducirError(e);
     }
   }
+
+    /// POST /api/auth/registro/cliente
+  /// Body: { "nombre", "email", "password", "telefono" (opcional) }
+  Future<RespuestaLogin> registrarCliente({
+    required String nombre,
+    required String email,
+    required String password,
+    String? telefono,
+  }) async {
+    try {
+      final respuesta = await api.dio.post('/auth/registro/cliente', data: {
+        'nombre': nombre.trim(),
+        'email': email.trim(),
+        'password': password,
+        // El teléfono solo se manda si el usuario lo escribió.
+        if (telefono != null && telefono.trim().isNotEmpty) 'telefono': telefono.trim(),
+      });
+      return RespuestaLogin.fromJson(respuesta.data as Map<String, dynamic>);
+    } catch (e) {
+      throw ApiClient.traducirError(e);
+    }
+  }
 }
+

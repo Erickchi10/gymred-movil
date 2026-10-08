@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_theme.dart';
+import 'registro_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -120,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           )
                         : const Text('Iniciar sesión'),
                   ),
-                  if (auth.cargando) ...[
+                                    if (auth.cargando) ...[
                     const SizedBox(height: 12),
                     Text(
                       'Conectando con el servidor… la primera vez puede tardar hasta un minuto.',
@@ -128,6 +129,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: textos.bodySmall?.copyWith(color: AppColors.textoSecundario),
                     ),
                   ],
+
+                  // Enlace para crear cuenta (fuera del "if", siempre visible)
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('¿No tienes cuenta?'),
+                      TextButton(
+                        onPressed: auth.cargando
+                            ? null
+                            : () {
+                                context.read<AuthProvider>().limpiarError();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (_) => const RegistroScreen()),
+                                );
+                              },
+                        child: const Text('Regístrate'),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -137,4 +158,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-

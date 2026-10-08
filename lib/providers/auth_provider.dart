@@ -71,6 +71,43 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+    /// Borra el mensaje de error (al cambiar de pantalla, por ejemplo).
+  void limpiarError() {
+    if (error != null) {
+      error = null;
+      notifyListeners();
+    }
+  }
+
+  /// Registra un socio nuevo y deja la sesión iniciada.
+  Future<bool> registrar({
+    required String nombre,
+    required String email,
+    required String password,
+    String? telefono,
+  }) async {
+    cargando = true;
+    error = null;
+    notifyListeners();
+    try {
+      final r = await _auth.registrarCliente(
+        nombre: nombre,
+        email: email,
+        password: password,
+        telefono: telefono,
+      );
+      await _storage.guardar(r.token);
+      usuario = r.usuario;
+      estado = EstadoSesion.conSesion;
+      return true;
+    } on ApiException catch (e) {
+      error = e.mensaje;
+      return false;
+    } finally {
+      cargando = false;
+      notifyListeners();
+    }
+  }
 
   Future<void> cerrarSesion() async {
     await _storage.borrar();
