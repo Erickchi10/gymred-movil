@@ -1,3 +1,4 @@
+import '../models/gimnasio.dart';
 import '../models/suscripcion.dart';
 import 'api_client.dart';
 
@@ -42,6 +43,17 @@ class MovilService {
       );
       final data = r.data as Map<String, dynamic>;
       return data['mensaje'] as String? ?? 'Plan activado';
+    } catch (e) {
+      throw ApiClient.traducirError(e);
+    }
+  }
+    /// GET /api/movil/gimnasios (no necesita token).
+  Future<List<GimnasioResumen>> gimnasios() async {
+    try {
+      final r = await api.dio.get('/movil/gimnasios');
+      return (r.data as List)
+          .map((g) => GimnasioResumen.fromJson(g as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       throw ApiClient.traducirError(e);
     }

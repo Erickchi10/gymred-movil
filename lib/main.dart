@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'providers/auth_provider.dart';
-import 'screens/inicio_screen.dart';
+import 'screens/home_shell.dart';
 import 'screens/login_screen.dart';
 import 'services/api_client.dart';
 import 'services/auth_service.dart';
@@ -24,7 +25,8 @@ void main() {
         Provider<ApiClient>.value(value: api),
         Provider<MovilService>.value(value: movilService),
         ChangeNotifierProvider(
-          create: (_) => AuthProvider(authService, storage, api)..revisarSesion(),
+          create: (_) =>
+              AuthProvider(authService, storage, api)..revisarSesion(),
         ),
       ],
       child: const GymredApp(),
@@ -46,10 +48,10 @@ class GymredApp extends StatelessWidget {
       // La pantalla cambia sola según haya sesión o no.
       home: switch (estado) {
         EstadoSesion.revisando => const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          ),
+          body: Center(child: CircularProgressIndicator()),
+        ),
         EstadoSesion.sinSesion => const LoginScreen(),
-        EstadoSesion.conSesion => const InicioScreen(),
+        EstadoSesion.conSesion => const HomeShell(),
       },
     );
   }
