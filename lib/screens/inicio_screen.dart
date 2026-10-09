@@ -4,6 +4,7 @@ import '../models/suscripcion.dart';
 import '../providers/auth_provider.dart';
 import '../services/movil_service.dart';
 import '../theme/app_theme.dart';
+import 'planes_screen.dart';
 
 const _meses = [
   'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
@@ -33,10 +34,12 @@ class _InicioScreenState extends State<InicioScreen> {
     _futuro = context.read<MovilService>().miSuscripcion();
   }
 
-  /// Vuelve a pedir los datos (al jalar la pantalla hacia abajo o en "Reintentar").
+  /// Vuelve a pedir los datos (al jalar hacia abajo, en "Reintentar" o al contratar).
   Future<void> _recargar() async {
     final f = context.read<MovilService>().miSuscripcion();
-    setState(() => _futuro = f);
+        setState(() {
+      _futuro = f;
+    });
     try {
       await f;
     } catch (_) {
@@ -44,11 +47,20 @@ class _InicioScreenState extends State<InicioScreen> {
     }
   }
 
+  /// Abre la pantalla de planes. Si el socio contrata, recarga el inicio.
+  Future<void> _abrirPlanes({int? idPlanActual}) async {
+    final contrato = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(builder: (_) => PlanesScreen(idPlanActual: idPlanActual)),
+    );
+    if (contrato == true) _recargar();
+  }
+
   @override
   Widget build(BuildContext context) {
     final usuario = context.watch<AuthProvider>().usuario;
     final nombre = (usuario?.nombre ?? '').trim().split(' ').first;
-    final primerNombre = nombre.isEmpty ? '' : nombre[0].toUpperCase() + nombre.substring(1);
+    final primerNombre =
+        nombre.isEmpty ? '' : nombre[0].toUpperCase() + nombre.substring(1);
 
     return Scaffold(
       appBar: AppBar(
@@ -93,10 +105,10 @@ class _InicioScreenState extends State<InicioScreen> {
 
     // Sin suscripción (nunca contrató o ya venció)
     if (!estado.activa || s == null) {
-      return const [
-        _SinSuscripcion(),
-        SizedBox(height: 16),
-        _BotonQr(
+      return [
+        _SinSuscripcion(onVerPlanes: () => _abrirPlanes()),
+        const SizedBox(height: 16),
+        const _BotonQr(
           habilitado: false,
           motivo: 'Necesitas una suscripción activa para entrar a un gimnasio.',
         ),
@@ -106,11 +118,20 @@ class _InicioScreenState extends State<InicioScreen> {
     // Con suscripción
     return [
       _TarjetaSuscripcion(s: s),
+      Align(
+        alignment: Alignment.centerRight,
+        child: TextButton(
+          onPressed: () => _abrirPlanes(idPlanActual: s.plan.id),
+          child: const Text('Cambiar de plan'),
+        ),
+      ),
       if (s.porVencer) ...[
-        const SizedBox(height: 12),
-        _AvisoVencimiento(dias: s.diasRestantes),
+        _AvisoVencimiento(
+          dias: s.diasRestantes,
+          onRenovar: () => _abrirPlanes(idPlanActual: s.plan.id),
+        ),
+        const SizedBox(height: 16),
       ],
-      const SizedBox(height: 16),
       _BotonQr(
         habilitado: s.visitasRestantesHoy > 0,
         motivo: 'Ya usaste tus visitas de hoy. Vuelve mañana.',
@@ -167,7 +188,7 @@ class _ErrorCarga extends StatelessWidget {
   }
 }
 
-/// Tarjeta blanca con bordes redondeados (se usa en varias piezas).
+/// Tarjeta blanca con bordes redondeados.
 class _Tarjeta extends StatelessWidget {
   final Widget child;
   const _Tarjeta({required this.child});
@@ -196,7 +217,8 @@ class _TarjetaSuscripcion extends StatelessWidget {
   Widget build(BuildContext context) {
     final textos = Theme.of(context).textTheme;
     final dias = s.diasRestantes;
-    final textoDias = dias <= 0 ? 'Vence hoy' : (dias == 1 ? 'Queda 1 día' : 'Quedan $dias días');
+    final textoDias =
+        dias <= 0 ? 'Vence hoy' : (dias == 1 ? 'Queda 1 día' : 'Quedan $dias días');
 
     return _Tarjeta(
       child: Column(
@@ -208,7 +230,7 @@ class _TarjetaSuscripcion extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: const Color(0x1F16A34A), // verde clarito
+                  color: const Color(0x1F16A34A),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Row(
@@ -286,8 +308,7 @@ class _Dato extends StatelessWidget {
         const SizedBox(height: 4),
         Text.rich(TextSpan(children: [
           TextSpan(
-              text: valor,
-              style: textos.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+              text: valor, style: textos.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
           TextSpan(text: ' $unidad', style: textos.bodySmall),
         ])),
       ],
@@ -297,7 +318,8 @@ class _Dato extends StatelessWidget {
 
 class _AvisoVencimiento extends StatelessWidget {
   final int dias;
-  const _AvisoVencimiento({required this.dias});
+  final VoidCallback onRenovar;
+  const _AvisoVencimiento({required this.dias, required this.onRenovar});
 
   @override
   Widget build(BuildContext context) {
@@ -306,7 +328,7 @@ class _AvisoVencimiento extends StatelessWidget {
         : 'Tu suscripción vence en $dias ${dias == 1 ? 'día' : 'días'}. Renuévala para no perder el acceso.';
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
       decoration: BoxDecoration(
         color: AppColors.naranjaClaro,
         borderRadius: BorderRadius.circular(12),
@@ -317,6 +339,7 @@ class _AvisoVencimiento extends StatelessWidget {
           const Icon(Icons.warning_amber_rounded, color: AppColors.naranjaOscuro),
           const SizedBox(width: 10),
           Expanded(child: Text(texto)),
+          TextButton(onPressed: onRenovar, child: const Text('Renovar')),
         ],
       ),
     );
@@ -324,7 +347,8 @@ class _AvisoVencimiento extends StatelessWidget {
 }
 
 class _SinSuscripcion extends StatelessWidget {
-  const _SinSuscripcion();
+  final VoidCallback onVerPlanes;
+  const _SinSuscripcion({required this.onVerPlanes});
 
   @override
   Widget build(BuildContext context) {
@@ -343,10 +367,7 @@ class _SinSuscripcion extends StatelessWidget {
             style: textos.bodyMedium?.copyWith(color: AppColors.textoSecundario),
           ),
           const SizedBox(height: 16),
-          FilledButton(
-            onPressed: () => _proximamente(context, 'Próximamente: lista de planes'),
-            child: const Text('Ver planes'),
-          ),
+          FilledButton(onPressed: onVerPlanes, child: const Text('Ver planes')),
         ],
       ),
     );
@@ -380,3 +401,4 @@ class _BotonQr extends StatelessWidget {
     );
   }
 }
+
