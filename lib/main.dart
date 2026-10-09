@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
+import 'screens/inicio_screen.dart';
 import 'screens/login_screen.dart';
 import 'services/api_client.dart';
 import 'services/auth_service.dart';
+import 'services/movil_service.dart';
 import 'services/token_storage.dart';
 import 'theme/app_theme.dart';
 
@@ -14,11 +16,13 @@ void main() {
   final storage = TokenStorage();
   final api = ApiClient(storage);
   final authService = AuthService(api);
+  final movilService = MovilService(api);
 
   runApp(
     MultiProvider(
       providers: [
-        Provider<ApiClient>.value(value: api), // lo usarán las demás pantallas
+        Provider<ApiClient>.value(value: api),
+        Provider<MovilService>.value(value: movilService),
         ChangeNotifierProvider(
           create: (_) => AuthProvider(authService, storage, api)..revisarSesion(),
         ),
@@ -45,35 +49,8 @@ class GymredApp extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           ),
         EstadoSesion.sinSesion => const LoginScreen(),
-        EstadoSesion.conSesion => const _InicioProvisional(),
+        EstadoSesion.conSesion => const InicioScreen(),
       },
-    );
-  }
-}
-
-/// Pantalla temporal para probar el login.
-/// En el siguiente paso la cambiamos por el Inicio real (mi suscripción).
-class _InicioProvisional extends StatelessWidget {
-  const _InicioProvisional();
-
-  @override
-  Widget build(BuildContext context) {
-    final usuario = context.watch<AuthProvider>().usuario;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gymred'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: 'Cerrar sesión',
-            onPressed: () => context.read<AuthProvider>().cerrarSesion(),
-          ),
-        ],
-      ),
-      body: Center(
-        child: Text('Hola, ${usuario?.nombre ?? ''} 👋',
-            style: Theme.of(context).textTheme.titleLarge),
-      ),
     );
   }
 }

@@ -96,9 +96,12 @@ class _RegistroScreenState extends State<RegistroScreen> {
                   ),
                   validator: (v) {
                     final t = v?.trim() ?? '';
-                    if (t.isEmpty) return 'Escribe tu correo';
-                    if (!t.contains('@') || !t.contains('.'))
+                    if (t.isEmpty) {
+                      return 'Escribe tu correo';
+                    }
+                    if (!t.contains('@') || !t.contains('.')) {
                       return 'Escribe un correo válido';
+                    }
                     return null;
                   },
                 ),
@@ -115,8 +118,9 @@ class _RegistroScreenState extends State<RegistroScreen> {
                   validator: (v) {
                     final t = v?.trim() ?? '';
                     if (t.isEmpty) return null; // es opcional
-                    if (!RegExp(r'^\d{10}$').hasMatch(t))
+                    if (!RegExp(r'^\d{10}$').hasMatch(t)) {
                       return 'Debe tener 10 dígitos';
+                    }
                     return null;
                   },
                 ),
