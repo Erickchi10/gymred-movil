@@ -5,6 +5,8 @@ import '../models/gimnasio.dart';
 import '../models/suscripcion.dart';
 import '../services/movil_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/comunes.dart';
+import 'detalle_gimnasio_screen.dart';
 
 /// Lo que necesita la pantalla: los gimnasios y el nivel del plan del socio.
 class _Datos {
@@ -143,8 +145,14 @@ class _GimnasiosScreenState extends State<GimnasiosScreen> {
                     itemBuilder: (context, i) => _TarjetaGimnasio(
                       g: lista[i],
                       nivelSocio: datos.nivelSocio,
-                      onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Próximamente: detalle del gimnasio')),
+                      // Abre la ficha completa del gimnasio
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => DetalleGimnasioScreen(
+                            gimnasio: lista[i],
+                            nivelSocio: datos.nivelSocio,
+                          ),
+                        ),
                       ),
                     ),
                   );
@@ -200,11 +208,11 @@ class _TarjetaGimnasio extends StatelessWidget {
               height: 140,
               width: double.infinity,
               child: urlFoto == null
-                  ? const _SinFoto()
+                  ? const SinFoto()
                   : Image.network(
                       urlFoto,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => const _SinFoto(),
+                      errorBuilder: (_, _, _) => const SinFoto(),
                     ),
             ),
             Padding(
@@ -242,12 +250,13 @@ class _TarjetaGimnasio extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 6,
                     children: [
-                      _Etiqueta(
+                      Etiqueta(
                         texto: g.categoriaTexto,
                         fondo: AppColors.azulClaro,
                         color: AppColors.azul,
                       ),
-                      _etiquetaNivel(),
+                      // Función de widgets/comunes.dart
+                      etiquetaNivel(g.nivelRequerido, nivelSocio),
                     ],
                   ),
                 ],
@@ -255,60 +264,6 @@ class _TarjetaGimnasio extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  /// Compara el nivel del plan del socio con el que pide el gimnasio.
-  Widget _etiquetaNivel() {
-    if (nivelSocio == null) {
-      return _Etiqueta(
-        texto: 'Nivel ${g.nivelRequerido}',
-        fondo: const Color(0xFFF4F4F5),
-        color: AppColors.textoSecundario,
-      );
-    }
-    if (nivelSocio! >= g.nivelRequerido) {
-      return const _Etiqueta(
-        texto: '✓ Incluido en tu plan',
-        fondo: Color(0x1F16A34A),
-        color: AppColors.verde,
-      );
-    }
-    return _Etiqueta(
-      texto: 'Requiere plan nivel ${g.nivelRequerido}',
-      fondo: const Color(0x14DC2626),
-      color: AppColors.rojo,
-    );
-  }
-}
-
-class _Etiqueta extends StatelessWidget {
-  final String texto;
-  final Color fondo;
-  final Color color;
-  const _Etiqueta({required this.texto, required this.fondo, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(color: fondo, borderRadius: BorderRadius.circular(20)),
-      child: Text(texto,
-          style: TextStyle(color: color, fontWeight: FontWeight.w600, fontSize: 12)),
-    );
-  }
-}
-
-class _SinFoto extends StatelessWidget {
-  const _SinFoto();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.naranjaClaro,
-      child: const Center(
-        child: Icon(Icons.fitness_center, size: 40, color: AppColors.naranja),
       ),
     );
   }

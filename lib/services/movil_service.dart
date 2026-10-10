@@ -1,6 +1,7 @@
 import '../models/gimnasio.dart';
 import '../models/suscripcion.dart';
 import 'api_client.dart';
+import '../models/gimnasio_detalle.dart';
 
 /// Peticiones de la app del socio (rutas /api/movil/... de la API).
 class MovilService {
@@ -47,12 +48,35 @@ class MovilService {
       throw ApiClient.traducirError(e);
     }
   }
-    /// GET /api/movil/gimnasios (no necesita token).
+
+  /// GET /api/movil/gimnasios (no necesita token).
   Future<List<GimnasioResumen>> gimnasios() async {
     try {
       final r = await api.dio.get('/movil/gimnasios');
       return (r.data as List)
           .map((g) => GimnasioResumen.fromJson(g as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw ApiClient.traducirError(e);
+    }
+  }
+
+  /// GET /api/movil/gimnasios/{id}
+  Future<GimnasioDetalle> detalleGimnasio(int id) async {
+    try {
+      final r = await api.dio.get('/movil/gimnasios/$id');
+      return GimnasioDetalle.fromJson(r.data as Map<String, dynamic>);
+    } catch (e) {
+      throw ApiClient.traducirError(e);
+    }
+  }
+
+  /// GET /api/movil/gimnasios/{id}/inventario
+  Future<List<GrupoInventario>> inventario(int id) async {
+    try {
+      final r = await api.dio.get('/movil/gimnasios/$id/inventario');
+      return (r.data as List)
+          .map((g) => GrupoInventario.fromJson(g as Map<String, dynamic>))
           .toList();
     } catch (e) {
       throw ApiClient.traducirError(e);
