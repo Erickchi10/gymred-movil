@@ -5,6 +5,7 @@ import '../providers/auth_provider.dart';
 import '../theme/app_theme.dart';
 import 'gimnasios_screen.dart';
 import 'inicio_screen.dart';
+import 'mapa_screen.dart';
 
 /// Contenedor principal con la barra de navegación de abajo.
 class HomeShell extends StatefulWidget {
@@ -21,6 +22,7 @@ class _HomeShellState extends State<HomeShell> {
   static const _pantallas = [
     InicioScreen(),
     GimnasiosScreen(),
+    MapaScreen(),
     _Provisional(
       titulo: 'Historial',
       icono: Icons.history,
@@ -62,6 +64,11 @@ class _HomeShellState extends State<HomeShell> {
               icon: Icon(Icons.location_on_outlined),
               selectedIcon: Icon(Icons.location_on, color: AppColors.naranja),
               label: 'Gimnasios',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.map_outlined),
+              selectedIcon: Icon(Icons.map, color: AppColors.naranja),
+              label: 'Mapa',
             ),
             NavigationDestination(
               icon: Icon(Icons.history),
