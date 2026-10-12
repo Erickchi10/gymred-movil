@@ -13,7 +13,9 @@ class AppColors {
   static const fondo = Color(0xFFF4F4F5);
   static const blanco = Color(0xFFFFFFFF);
   static const rojo = Color(0xFFDC2626);
-  static const verde = Color(0xFF16A34A); // para "Acceso permitido"
+  static const verde = Color(0xFF16A34A);
+
+  static Color? get naranjaHover => null; // para "Acceso permitido"
 }
 
 class AppTheme {
