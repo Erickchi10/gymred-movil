@@ -49,10 +49,25 @@ class MovilService {
     }
   }
 
-  /// GET /api/movil/gimnasios (no necesita token).
-  Future<List<GimnasioResumen>> gimnasios() async {
+  /// GET /api/movil/gimnasios?buscar=&categoria=&lat=&lng=
+  /// Si mandas lat y lng, la API regresa distanciaKm y ordena por cercanía.
+  Future<List<GimnasioResumen>> gimnasios({
+    String? buscar,
+    String? categoria,
+    double? lat,
+    double? lng,
+  }) async {
     try {
-      final r = await api.dio.get('/movil/gimnasios');
+      final query = <String, dynamic>{};
+      if (buscar != null && buscar.trim().isNotEmpty) {
+        query['buscar'] = buscar.trim();
+      }
+      if (categoria != null) query['categoria'] = categoria;
+      if (lat != null && lng != null) {
+        query['lat'] = lat;
+        query['lng'] = lng;
+      }
+      final r = await api.dio.get('/movil/gimnasios', queryParameters: query);
       return (r.data as List)
           .map((g) => GimnasioResumen.fromJson(g as Map<String, dynamic>))
           .toList();

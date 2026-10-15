@@ -4,6 +4,7 @@ import '../config/api_config.dart';
 import '../models/gimnasio.dart';
 import '../models/suscripcion.dart';
 import '../services/movil_service.dart';
+import '../services/ubicacion_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/comunes.dart';
 import 'detalle_gimnasio_screen.dart';
@@ -33,10 +34,16 @@ class _GimnasiosScreenState extends State<GimnasiosScreen> {
     _futuro = _cargar();
   }
 
-  /// Pide las dos cosas al mismo tiempo para que cargue más rápido.
+  /// Pide la ubicación, la lista de gimnasios y el plan del socio al mismo tiempo.
+  /// Si no hay permiso de ubicación, la lista sale igual pero sin distancias.
   Future<_Datos> _cargar() async {
     final movil = context.read<MovilService>();
-    final resultados = await Future.wait([movil.gimnasios(), movil.miSuscripcion()]);
+    final posicion = await UbicacionService().posicionActual();
+
+    final resultados = await Future.wait([
+      movil.gimnasios(lat: posicion?.latitude, lng: posicion?.longitude),
+      movil.miSuscripcion(),
+    ]);
     final gimnasios = resultados[0] as List<GimnasioResumen>;
     final estado = resultados[1] as EstadoSuscripcion;
     return _Datos(gimnasios, estado.activa ? estado.suscripcion?.plan.nivel : null);
@@ -243,6 +250,17 @@ class _TarjetaGimnasio extends StatelessWidget {
                           style: textos.bodySmall?.copyWith(color: AppColors.textoSecundario),
                         ),
                       ),
+                      // Distancia desde tu ubicación (solo si dimos permiso de GPS)
+                      if (g.distanciaKm != null) ...[
+                        const SizedBox(width: 8),
+                        Text(
+                          '${g.distanciaKm!.toStringAsFixed(1)} km',
+                          style: textos.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.naranja,
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                   const SizedBox(height: 10),
