@@ -5,6 +5,7 @@ import '../providers/auth_provider.dart';
 import '../services/movil_service.dart';
 import '../theme/app_theme.dart';
 import 'planes_screen.dart';
+import 'escanear_qr_screen.dart';
 
 const _meses = [
   'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
@@ -13,10 +14,6 @@ const _meses = [
 
 /// "18 de octubre"
 String fechaLarga(DateTime f) => '${f.day} de ${_meses[f.month - 1]}';
-
-void _proximamente(BuildContext context, String texto) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(texto)));
-}
 
 class InicioScreen extends StatefulWidget {
   const InicioScreen({super.key});
@@ -37,7 +34,7 @@ class _InicioScreenState extends State<InicioScreen> {
   /// Vuelve a pedir los datos (al jalar hacia abajo, en "Reintentar" o al contratar).
   Future<void> _recargar() async {
     final f = context.read<MovilService>().miSuscripcion();
-        setState(() {
+    setState(() {
       _futuro = f;
     });
     try {
@@ -53,6 +50,14 @@ class _InicioScreenState extends State<InicioScreen> {
       MaterialPageRoute(builder: (_) => PlanesScreen(idPlanActual: idPlanActual)),
     );
     if (contrato == true) _recargar();
+  }
+
+  /// Abre el escáner. Al volver, recarga para actualizar las visitas del día.
+  Future<void> _escanear() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const EscanearQrScreen()),
+    );
+    if (mounted) _recargar();
   }
 
   @override
@@ -111,6 +116,7 @@ class _InicioScreenState extends State<InicioScreen> {
         const _BotonQr(
           habilitado: false,
           motivo: 'Necesitas una suscripción activa para entrar a un gimnasio.',
+          onEscanear: null,
         ),
       ];
     }
@@ -135,6 +141,7 @@ class _InicioScreenState extends State<InicioScreen> {
       _BotonQr(
         habilitado: s.visitasRestantesHoy > 0,
         motivo: 'Ya usaste tus visitas de hoy. Vuelve mañana.',
+        onEscanear: _escanear,
       ),
     ];
   }
@@ -377,7 +384,12 @@ class _SinSuscripcion extends StatelessWidget {
 class _BotonQr extends StatelessWidget {
   final bool habilitado;
   final String motivo;
-  const _BotonQr({required this.habilitado, required this.motivo});
+  final VoidCallback? onEscanear;
+  const _BotonQr({
+    required this.habilitado,
+    required this.motivo,
+    required this.onEscanear,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -385,9 +397,7 @@ class _BotonQr extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         FilledButton.icon(
-          onPressed: habilitado
-              ? () => _proximamente(context, 'Próximamente: escanear el QR del gimnasio')
-              : null,
+          onPressed: habilitado ? onEscanear : null,
           icon: const Icon(Icons.qr_code_scanner),
           label: const Text('Escanear QR'),
         ),
@@ -401,4 +411,3 @@ class _BotonQr extends StatelessWidget {
     );
   }
 }
-

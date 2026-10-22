@@ -31,7 +31,7 @@ class AuthService {
     }
   }
 
-    /// POST /api/auth/registro/cliente
+  /// POST /api/auth/registro/cliente
   /// Body: { "nombre", "email", "password", "telefono" (opcional) }
   Future<RespuestaLogin> registrarCliente({
     required String nombre,
@@ -52,5 +52,20 @@ class AuthService {
       throw ApiClient.traducirError(e);
     }
   }
-}
 
+  /// PUT /api/auth/password (necesita el token)
+  /// Body: { "actual": "...", "nueva": "..." }
+  Future<void> cambiarPassword({
+    required String actual,
+    required String nueva,
+  }) async {
+    try {
+      await api.dio.put('/auth/password', data: {
+        'actual': actual,
+        'nueva': nueva,
+      });
+    } catch (e) {
+      throw ApiClient.traducirError(e);
+    }
+  }
+}

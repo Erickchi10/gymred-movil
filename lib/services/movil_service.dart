@@ -1,7 +1,9 @@
+import '../models/acceso.dart';
 import '../models/gimnasio.dart';
 import '../models/suscripcion.dart';
 import 'api_client.dart';
 import '../models/gimnasio_detalle.dart';
+import '../models/historial.dart';
 
 /// Peticiones de la app del socio (rutas /api/movil/... de la API).
 class MovilService {
@@ -97,4 +99,40 @@ class MovilService {
       throw ApiClient.traducirError(e);
     }
   }
+
+  /// POST /api/movil/acceso
+  /// Body: { "codigo": "texto del QR" }. Regresa si se permite el paso y por qué.
+  Future<ResultadoAcceso> entrar(String codigo) async {
+    try {
+      final r = await api.dio.post('/movil/acceso', data: {'codigo': codigo});
+      return ResultadoAcceso.fromJson(r.data as Map<String, dynamic>);
+    } catch (e) {
+      throw ApiClient.traducirError(e);
+    }
+  }
+    /// Visitas del cliente, las más recientes primero.
+  Future<List<ItemHistorial>> historial() async {
+    final r = await api.dio.get('/movil/mi-historial');
+    final lista = (r.data as List).cast<Map<String, dynamic>>();
+    return lista.map(ItemHistorial.fromJson).toList();
+  }
+    /// POST /api/movil/gimnasios/:id/resena
+  /// Body: { "calificacion": 1 a 5, "comentario": "..." (opcional) }
+  /// Solo deja calificar gimnasios que ya visitaste.
+  Future<void> calificarGimnasio({
+    required int idGimnasio,
+    required int calificacion,
+    String? comentario,
+  }) async {
+    try {
+      await api.dio.post('/movil/gimnasios/$idGimnasio/resena', data: {
+        'calificacion': calificacion,
+        if (comentario != null && comentario.trim().isNotEmpty)
+          'comentario': comentario.trim(),
+      });
+    } catch (e) {
+      throw ApiClient.traducirError(e);
+    }
+  }
 }
+
