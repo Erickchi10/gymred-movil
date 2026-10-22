@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/suscripcion.dart';
 import '../providers/auth_provider.dart';
 import '../services/movil_service.dart';
+import '../services/notificaciones_service.dart';
 import '../theme/app_theme.dart';
 import 'planes_screen.dart';
 import 'escanear_qr_screen.dart';
@@ -29,6 +30,20 @@ class _InicioScreenState extends State<InicioScreen> {
   void initState() {
     super.initState();
     _futuro = context.read<MovilService>().miSuscripcion();
+    _revisarVencimiento(_futuro);
+  }
+
+  /// Si el plan está por vencer, manda un aviso del sistema (máximo uno al día).
+  Future<void> _revisarVencimiento(Future<EstadoSuscripcion> f) async {
+    try {
+      final estado = await f;
+      final s = estado.suscripcion;
+      if (estado.activa && s != null && s.porVencer) {
+        await NotificacionesService.avisarVencimiento(s.diasRestantes);
+      }
+    } catch (_) {
+      // Si la carga falla, el FutureBuilder ya muestra el error.
+    }
   }
 
   /// Vuelve a pedir los datos (al jalar hacia abajo, en "Reintentar" o al contratar).
@@ -37,6 +52,7 @@ class _InicioScreenState extends State<InicioScreen> {
     setState(() {
       _futuro = f;
     });
+    _revisarVencimiento(f);
     try {
       await f;
     } catch (_) {
