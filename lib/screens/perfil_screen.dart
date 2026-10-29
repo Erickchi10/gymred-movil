@@ -455,6 +455,8 @@ class _Opcion extends StatelessWidget {
 }
 
 /// Tarjeta blanca con bordes redondeados.
+/// El fondo lo pinta un Material para que los ListTile de adentro
+/// tengan dónde dibujar su efecto al tocarlos.
 class _Tarjeta extends StatelessWidget {
   final Widget child;
   const _Tarjeta({required this.child});
@@ -463,15 +465,21 @@ class _Tarjeta extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.blanco,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+        boxShadow: [
           BoxShadow(color: Color(0x14000000), blurRadius: 12, offset: Offset(0, 4)),
         ],
       ),
-      child: child,
+      child: Material(
+        color: AppColors.blanco,
+        borderRadius: BorderRadius.circular(16),
+        clipBehavior: Clip.antiAlias,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: child,
+        ),
+      ),
     );
   }
 }

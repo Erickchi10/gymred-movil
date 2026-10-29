@@ -33,13 +33,15 @@ class _InicioScreenState extends State<InicioScreen> {
     _revisarVencimiento(_futuro);
   }
 
-  /// Si el plan está por vencer, manda un aviso del sistema (máximo uno al día).
+  /// Programa el aviso según la fecha de vencimiento, o lo cancela si no hay suscripción.
   Future<void> _revisarVencimiento(Future<EstadoSuscripcion> f) async {
     try {
       final estado = await f;
       final s = estado.suscripcion;
-      if (estado.activa && s != null && s.porVencer) {
-        await NotificacionesService.avisarVencimiento(s.diasRestantes);
+      if (estado.activa && s != null) {
+        await NotificacionesService.programarVencimiento(s.fechaFin);
+      } else {
+        await NotificacionesService.cancelar();
       }
     } catch (_) {
       // Si la carga falla, el FutureBuilder ya muestra el error.
@@ -90,7 +92,10 @@ class _InicioScreenState extends State<InicioScreen> {
           IconButton(
             icon: const Icon(Icons.logout),
             tooltip: 'Cerrar sesión',
-            onPressed: () => context.read<AuthProvider>().cerrarSesion(),
+            onPressed: () {
+              NotificacionesService.cancelar();
+              context.read<AuthProvider>().cerrarSesion();
+            },
           ),
         ],
       ),
