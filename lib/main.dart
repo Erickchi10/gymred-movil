@@ -23,6 +23,7 @@ void main() {
     MultiProvider(
       providers: [
         Provider<ApiClient>.value(value: api),
+        Provider<AuthService>.value(value: authService),
         Provider<MovilService>.value(value: movilService),
         ChangeNotifierProvider(
           create: (_) =>
@@ -56,4 +57,3 @@ class GymredApp extends StatelessWidget {
     );
   }
 }
-

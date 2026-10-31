@@ -108,7 +108,23 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
+  /// Guarda los datos y actualiza el usuario en memoria,
+  /// así el encabezado de Perfil se redibuja solo.
+  Future<void> actualizarPerfil({
+    required String nombre,
+    required String telefono,
+    required String email,
+    String? passwordActual,
+  }) async {
+    usuario = await _auth.actualizarPerfil(
+      nombre: nombre,
+      telefono: telefono,
+      email: email,
+      passwordActual: passwordActual,
+    );
+    notifyListeners();
+  }
+  
   Future<void> cerrarSesion() async {
     await _storage.borrar();
     usuario = null;

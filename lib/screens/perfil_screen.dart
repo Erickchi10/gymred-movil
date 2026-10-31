@@ -8,6 +8,7 @@ import '../services/auth_service.dart';
 import '../services/movil_service.dart';
 import '../theme/app_theme.dart';
 import 'cambiar_password_screen.dart';
+import 'editar_perfil_screen.dart';
 import 'historial_screen.dart';
 import 'inicio_screen.dart';
 import 'planes_screen.dart';
@@ -207,6 +208,20 @@ class _PerfilScreenState extends State<PerfilScreen> {
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const HistorialScreen()),
                 ),
+              ),
+              const Divider(height: 1),
+              _Opcion(
+                icono: Icons.edit_outlined,
+                texto: 'Editar datos',
+                onTap: () async {
+                  final cambio = await Navigator.of(context).push<bool>(
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          EditarPerfilScreen(telefonoActual: datos.telefono),
+                    ),
+                  );
+                  if (cambio == true) _recargar();
+                },
               ),
               const Divider(height: 1),
               _Opcion(

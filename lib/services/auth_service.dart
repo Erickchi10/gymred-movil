@@ -53,6 +53,29 @@ class AuthService {
     }
   }
 
+  /// PUT /api/auth/perfil (necesita el token)
+  /// Body: nombre, telefono, email y passwordActual (solo si cambias el correo).
+  /// Regresa el usuario ya actualizado.
+  Future<Usuario> actualizarPerfil({
+    required String nombre,
+    required String telefono,
+    required String email,
+    String? passwordActual,
+  }) async {
+    try {
+      final respuesta = await api.dio.put('/auth/perfil', data: {
+        'nombre': nombre.trim(),
+        'telefono': telefono.trim(),
+        'email': email.trim(),
+        if (passwordActual != null && passwordActual.isNotEmpty)
+          'passwordActual': passwordActual,
+      });
+      return Usuario.fromJson(respuesta.data as Map<String, dynamic>);
+    } catch (e) {
+      throw ApiClient.traducirError(e);
+    }
+  }
+
   /// PUT /api/auth/password (necesita el token)
   /// Body: { "actual": "...", "nueva": "..." }
   Future<void> cambiarPassword({
